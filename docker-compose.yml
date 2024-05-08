@@ -1,0 +1,29 @@
+version: '3.7'
+
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: local_ecom
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+  postgrest:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      PGRST_DB_URI : "postgres://postgres:password@host.docker.internal:5432/local_ecom"
+      PGRST_DB_SCHEMAS : "api"
+      PGRST_DB_ANON_ROLE : "customer"
+      PGRST_JWT_SECRET : AtfxGAmuyz7IpHRudBI0WgGjZWgaRJt6
+    depends_on:
+      - postgres
+    restart: always
+
+
+
+    
