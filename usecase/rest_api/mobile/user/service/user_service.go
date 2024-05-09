@@ -23,3 +23,11 @@ func (u *UserService) GetAllUsers() ([]model.UserResponse, pkgError.CustomError)
 	}
 	return users, NoError
 }
+
+func (u *UserService) AddUserAddressService(address model.UserAddresRequest) (string, pkgError.CustomError) {
+	userAddress, err := u.Repository.AddUserAddresRepo(address)
+	if err != nil {
+		return userAddress, ErrorRepository
+	}
+	return userAddress, NoError
+}

@@ -1,7 +1,9 @@
 package repository
 
 import (
+	"bytes"
 	"encoding/json"
+	"errors"
 	"net/http"
 	"postgrest/config"
 	"postgrest/usecase/rest_api/mobile/user/domain"
@@ -33,4 +35,24 @@ func (u *UserRepoImpl) GetAllUsersRepo() ([]model.UserResponse, error) {
 	}
 
 	return users, nil
+}
+
+func (u *UserRepoImpl) AddUserAddresRepo(address model.UserAddresRequest) (string, error) {
+
+	host := config.Configuration.Get("POSTGREST_HOST")
+	port := config.Configuration.Get("POSTGREST_PORT")
+	apiURI := host + ":" + port + "/user_address"
+	userAddressReq, err := json.Marshal(address)
+	if err != nil {
+		return "", err
+	}
+	resp, err := http.Post(apiURI, "application/json", bytes.NewBuffer(userAddressReq))
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusCreated {
+		return "", errors.New("invalid status code")
+	}
+	return UserCreated, nil
 }

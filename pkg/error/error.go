@@ -21,6 +21,14 @@ func (e CustomError) IsNoError() bool {
 	return e == CustomError{}
 }
 
+func (e CustomError) WithError(err error) CustomError {
+	if err != nil {
+		e.Err = err
+	}
+	return e
+}
+
 var (
-	ErrorInvalidToken CustomError = CustomError{Code: "authentication_failed", Message: "Invalid Token", HttpCode: fiber.StatusUnauthorized}
+	ErrorInvalidToken   CustomError = CustomError{Code: "authentication_failed", Message: "Invalid Token", HttpCode: fiber.StatusUnauthorized}
+	ErrorInvalidPayload CustomError = CustomError{Code: "Invalid Payload", Message: "invalid_payload", HttpCode: fiber.StatusBadRequest}
 )
