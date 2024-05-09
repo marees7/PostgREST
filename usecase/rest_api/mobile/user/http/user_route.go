@@ -13,8 +13,9 @@ func ReisterUserRoute(router fiber.Router) {
 	//define routes
 	{
 		version.RunMobile(func(apiWithVersion fiber.Router) {
-			apiWithVersion.Post("add-address", handler.AddUserAddress)
 			apiWithVersion.Get("", handler.GetUsers)
+			apiWithVersion.Post("create-user", handler.CreateUser)
+			apiWithVersion.Post("add-address", handler.AddUserAddress)
 		}, "v1")
 	}
 }

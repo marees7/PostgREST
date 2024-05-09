@@ -32,6 +32,23 @@ func (u *UserService) GetUsers(c *fiber.Ctx) error {
 	return helpers.GenerateSuccessResponse(c, resp)
 }
 
+func (u *UserService) CreateUser(c *fiber.Ctx) error {
+
+	//Get payload
+	var payload = model.UserRequest{}
+	err := c.BodyParser(&payload)
+	if err != nil {
+		return helpers.GenerateErrorResponseWithPKGError(c, pkgError.ErrorInvalidPayload.WithError(err), fiber.Map{"detail": err.Error()})
+	}
+
+	resp, customErr := u.Service.CreateUserService(payload)
+	if !customErr.IsNoError() {
+		helpers.GenerateCustomErrorResponseWithPKGError(c, customErr, resp)
+	}
+
+	return helpers.GenerateSuccessResponse(c, resp)
+}
+
 func (u *UserService) AddUserAddress(c *fiber.Ctx) error {
 
 	//Get payload

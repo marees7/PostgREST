@@ -23,3 +23,9 @@ type UserAddresRequest struct {
 	City       string `json:"city"`
 	District   string `json:"district"`
 }
+
+type UserRequest struct {
+	Username    string            `json:"user_name"`
+	PhoneNumber string            `json:"phone_number"`
+	Address     *UserAddresRequest `json:"user_address"`
+}
