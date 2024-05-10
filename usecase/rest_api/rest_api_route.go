@@ -2,6 +2,7 @@ package restapi
 
 import (
 	"fmt"
+	authRoute "postgrest/usecase/rest_api/mobile/auth/http"
 	"postgrest/usecase/rest_api/mobile/user/http"
 
 	"github.com/gofiber/fiber/v2"
@@ -11,6 +12,7 @@ func RegisterRoute(router fiber.Router) {
 
 	//Register routes
 	http.ReisterUserRoute(router)
+	authRoute.ReisterAuthRoute(router)
 
 	//use it for other services
 	registerRouteMobileByVersion("v1", router, func(api fiber.Router) {})

@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"postgrest/config"
+	"postgrest/pkg/cache"
 	restapi "postgrest/usecase/rest_api"
 
 	"github.com/gofiber/fiber/v2"
@@ -15,6 +16,12 @@ func main() {
 	errConfig := config.New("cmd/api/.env")
 	if errConfig != nil {
 		panic(errConfig)
+	}
+
+	//Redis connection
+	err := cache.NewRedisRestAPIConnection()
+	if err != nil {
+		log.Fatal("Redis connection failed")
 	}
 
 	//Fiber setup
