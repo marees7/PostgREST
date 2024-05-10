@@ -65,3 +65,13 @@ func (u *UserService) AddUserAddress(c *fiber.Ctx) error {
 
 	return helpers.GenerateCreatedSuccessResponse(c, resp)
 }
+
+func (u *UserService) GetAllAddresses(c *fiber.Ctx) error {
+
+	resp, customErr := u.Service.GetAllAddressesService()
+	if !customErr.IsNoError() {
+		helpers.GenerateCustomErrorResponseWithPKGError(c, customErr, resp)
+	}
+
+	return helpers.GenerateSuccessResponse(c, resp)
+}

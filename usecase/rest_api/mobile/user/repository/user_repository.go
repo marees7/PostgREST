@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"net/http"
 	"postgrest/config"
 	"postgrest/usecase/rest_api/mobile/user/domain"
@@ -53,28 +52,10 @@ func (u *UserRepoImpl) AddUserAddresRepo(address model.UserAddresRequest) (strin
 		return "", err
 	}
 	defer resp.Body.Close()
-	fmt.Println("resp.StatusCode ::", resp.StatusCode)
 	if resp.StatusCode != http.StatusCreated {
 		return "", errors.New("invalid status code")
 	}
-	return UserCreated, nil
-}
-
-func getLastInsertedRecod(host string, port string) (model.UserAddressRespons, error) {
-	users := model.UserAddressRespons{}
-	apiURI := host + ":" + port + "/get_last_record"
-	http.Header.Add(http.Header{}, "Authorization", "Bearer "+config.Configuration.Get("POSTGREST_TOKEN"))
-	resp, err := http.Get(apiURI)
-	if err != nil {
-		return users, err
-	}
-	defer resp.Body.Close()
-	err = json.NewDecoder(resp.Body).Decode(&users)
-	if err != nil {
-		return users, err
-	}
-
-	return users, nil
+	return UserAddressCreated, nil
 }
 
 func (u *UserRepoImpl) CreateUserRepo(user model.UserRequest) (string, error) {
@@ -82,29 +63,8 @@ func (u *UserRepoImpl) CreateUserRepo(user model.UserRequest) (string, error) {
 	host := config.Configuration.Get("POSTGREST_HOST")
 	port := config.Configuration.Get("POSTGREST_PORT")
 	apiURI := host + ":" + port + "/user"
-	var addressId *int
-	if user.Address != nil {
-		_, err := u.AddUserAddresRepo(*user.Address)
-		if err != nil {
-			return "", err
-		}
-		addressData, err := getLastInsertedRecod(host, port)
-		if err != nil {
-			return "", err
-		}
-		addressId = &addressData.Id
-	}
-	userRequest := struct {
-		Username    string `json:"user_name"`
-		AddressId   int    `json:"address_id"`
-		PhoneNumber string `json:"phone_number"`
-	}{
-		Username:    user.Username,
-		AddressId:   *addressId,
-		PhoneNumber: user.PhoneNumber,
-	}
 
-	userReq, err := json.Marshal(userRequest)
+	userReq, err := json.Marshal(user)
 	if err != nil {
 		return "", err
 	}
@@ -118,4 +78,24 @@ func (u *UserRepoImpl) CreateUserRepo(user model.UserRequest) (string, error) {
 		return "", errors.New("invalid status code")
 	}
 	return UserCreated, nil
+}
+
+func (u *UserRepoImpl) GetAllAddressRepo() ([]model.UserAddressResponse, error) {
+	users := []model.UserAddressResponse{}
+
+	host := config.Configuration.Get("POSTGREST_HOST")
+	port := config.Configuration.Get("POSTGREST_PORT")
+	apiURI := host + ":" + port + "/get_all_user_address"
+	http.Header.Add(http.Header{}, "Authorization", "Bearer "+config.Configuration.Get("POSTGREST_TOKEN"))
+	resp, err := http.Get(apiURI)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	err = json.NewDecoder(resp.Body).Decode(&users)
+	if err != nil {
+		return nil, err
+	}
+
+	return users, nil
 }

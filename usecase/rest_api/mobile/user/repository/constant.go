@@ -1,5 +1,6 @@
 package repository
 
 var (
-	UserCreated = "User Address Created Successfully"
+	UserAddressCreated = "User Address Created Successfully"
+	UserCreated        = "User created successfully"
 )

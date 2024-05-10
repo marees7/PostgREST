@@ -16,6 +16,7 @@ func ReisterUserRoute(router fiber.Router) {
 			apiWithVersion.Get("", handler.GetUsers)
 			apiWithVersion.Post("create-user", handler.CreateUser)
 			apiWithVersion.Post("add-address", handler.AddUserAddress)
+			apiWithVersion.Get("all-addresses", handler.GetAllAddresses)
 		}, "v1")
 	}
 }

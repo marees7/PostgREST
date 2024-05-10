@@ -1,7 +1,6 @@
 package service
 
 import (
-	"fmt"
 	pkgError "postgrest/pkg/error"
 	"postgrest/usecase/rest_api/mobile/user/domain"
 	"postgrest/usecase/rest_api/mobile/user/model"
@@ -35,9 +34,16 @@ func (u *UserService) CreateUserService(user model.UserRequest) (string, pkgErro
 
 func (u *UserService) AddUserAddressService(address model.UserAddresRequest) (string, pkgError.CustomError) {
 	userAddress, err := u.Repository.AddUserAddresRepo(address)
-	fmt.Println("user add ::", userAddress, err)
 	if err != nil {
 		return userAddress, ErrorRepository
 	}
 	return userAddress, NoError
+}
+
+func (u *UserService) GetAllAddressesService() ([]model.UserAddressResponse, pkgError.CustomError) {
+	users, err := u.Repository.GetAllAddressRepo()
+	if err != nil {
+		return nil, ErrorRepository
+	}
+	return users, NoError
 }
