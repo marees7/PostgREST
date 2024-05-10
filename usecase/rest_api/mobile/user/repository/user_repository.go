@@ -63,8 +63,18 @@ func (u *UserRepoImpl) CreateUserRepo(user model.UserRequest) (string, error) {
 	host := config.Configuration.Get("POSTGREST_HOST")
 	port := config.Configuration.Get("POSTGREST_PORT")
 	apiURI := host + ":" + port + "/user"
-
-	userReq, err := json.Marshal(user)
+	temp := struct {
+		Username    string `json:"user_name"`
+		PhoneNumber string `json:"phone_number"`
+		Gender      string `json:"gender"`
+		Email       string `json:"email"`
+	}{
+		Username:    user.Username,
+		PhoneNumber: user.PhoneNumber,
+		Gender:      user.Gender,
+		Email:       user.Email,
+	}
+	userReq, err := json.Marshal(temp)
 	if err != nil {
 		return "", err
 	}

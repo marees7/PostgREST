@@ -26,7 +26,7 @@ func (u *UserService) GetUsers(c *fiber.Ctx) error {
 
 	resp, err := u.Service.GetAllUsers()
 	if !err.IsNoError() {
-		helpers.GenerateCustomErrorResponseWithPKGError(c, err, resp)
+		return helpers.GenerateCustomErrorResponseWithPKGError(c, err, resp)
 	}
 
 	return helpers.GenerateSuccessResponse(c, resp)
@@ -43,7 +43,7 @@ func (u *UserService) CreateUser(c *fiber.Ctx) error {
 
 	resp, customErr := u.Service.CreateUserService(payload)
 	if !customErr.IsNoError() {
-		helpers.GenerateCustomErrorResponseWithPKGError(c, customErr, resp)
+		return helpers.GenerateCustomErrorResponseWithPKGError(c, customErr, resp)
 	}
 
 	return helpers.GenerateSuccessResponse(c, resp)
@@ -60,7 +60,7 @@ func (u *UserService) AddUserAddress(c *fiber.Ctx) error {
 
 	resp, customErr := u.Service.AddUserAddressService(payload)
 	if !customErr.IsNoError() {
-		helpers.GenerateCustomErrorResponseWithPKGError(c, customErr, resp)
+		return helpers.GenerateCustomErrorResponseWithPKGError(c, customErr, resp)
 	}
 
 	return helpers.GenerateCreatedSuccessResponse(c, resp)
@@ -70,7 +70,17 @@ func (u *UserService) GetAllAddresses(c *fiber.Ctx) error {
 
 	resp, customErr := u.Service.GetAllAddressesService()
 	if !customErr.IsNoError() {
-		helpers.GenerateCustomErrorResponseWithPKGError(c, customErr, resp)
+		return helpers.GenerateCustomErrorResponseWithPKGError(c, customErr, resp)
+	}
+
+	return helpers.GenerateSuccessResponse(c, resp)
+}
+
+func (u *UserService) GetAllUserAddresses(c *fiber.Ctx) error {
+
+	resp, customErr := u.Service.GetAllUserAddressesService()
+	if !customErr.IsNoError() {
+		return helpers.GenerateCustomErrorResponseWithPKGError(c, customErr, resp)
 	}
 
 	return helpers.GenerateSuccessResponse(c, resp)

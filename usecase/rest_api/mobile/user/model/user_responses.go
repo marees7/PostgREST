@@ -31,4 +31,5 @@ type UserRequest struct {
 	PhoneNumber string `json:"phone_number"`
 	Gender      string `json:"gender"`
 	Email       string `json:"email"`
+	Password    string `json:"password"`
 }
