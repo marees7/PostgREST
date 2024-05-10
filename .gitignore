@@ -1,0 +1,5 @@
+# Ignore go module files
+go.mod
+go.sum
+
+cmd\api\.env
